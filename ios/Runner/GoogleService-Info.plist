@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>197895558652-33p2tl5h631idnp329drtgbdko7u7puu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.197895558652-33p2tl5h631idnp329drtgbdko7u7puu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCui-ziuJRsaV2XdVKuZD8Is9VVX1NjcAQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>197895558652</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.swinglam</string>
+	<key>PROJECT_ID</key>
+	<string>swinglam-5c645</string>
+	<key>STORAGE_BUCKET</key>
+	<string>swinglam-5c645.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:197895558652:ios:8630908f16740d83648e79</string>
+</dict>
+</plist>
