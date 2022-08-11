@@ -41,6 +41,13 @@ dependencies:
   cloud_firestore: ^3.4.3
   firebase_analytics: ^9.3.0
   google_sign_in: ^5.4.0
+  provider: ^6.0.3
+  font_awesome_flutter: ^10.1.0
+  fluttertoast: ^8.0.9
+  image_picker: ^0.8.5+3
+  geolocator: ^9.0.1
+  geocoding: ^2.0.4
+
 
 
 
