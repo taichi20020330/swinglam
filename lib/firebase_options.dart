@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBTX3g_JwOAEE4DQEbJHbyWqNKZR82PIE4',
-    appId: '1:197895558652:android:f650c9f7e546a72a648e79',
+    appId: '1:197895558652:android:fc6ba938f6f17628648e79',
     messagingSenderId: '197895558652',
     projectId: 'swinglam-5c645',
     storageBucket: 'swinglam-5c645.appspot.com',
@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '197895558652',
     projectId: 'swinglam-5c645',
     storageBucket: 'swinglam-5c645.appspot.com',
+    androidClientId: '197895558652-lit7sb88mmjkm7iom9hluoeefqe6bf6o.apps.googleusercontent.com',
     iosClientId: '197895558652-33p2tl5h631idnp329drtgbdko7u7puu.apps.googleusercontent.com',
     iosBundleId: 'com.example.swinglam',
   );

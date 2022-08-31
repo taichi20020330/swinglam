@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:geocoding/geocoding.dart' as geoCoding;
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:swinglam/data_models/like.dart';
+import 'package:swinglam/data_models/user.dart';
 import 'package:swinglam/models/db/databese_manager.dart';
 import 'package:swinglam/models/location/location_manager.dart';
+import 'package:uuid/uuid.dart';
 import '../../constants.dart';
+import '../../data_models/comment.dart';
 import '../../data_models/location.dart' as Local;
+import '../../data_models/post.dart';
 
 class PostRepository {
   final DatabaseManager dbManager;
@@ -28,47 +34,102 @@ class PostRepository {
     }
 
   }
-
   Future<Local.Location> getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    final Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    final List<Placemark> placeMarks = await geoCoding.placemarkFromCoordinates(position.latitude, position.longitude);
-    final placeMark = placeMarks.first;
-    return Future.value(convert(placeMark, position.latitude, position.longitude));
-
-
+    return await locationManager.getCurrentLocation();
   }
 
-  Local.Location convert(geoCoding.Placemark placeMark, double latitude, double longitude) {
-    return Local.Location(
-        latitude:latitude,
-        longitude:longitude,
-        country: placeMark.country ?? "",
-        state: placeMark.administrativeArea ?? "",
-        city:placeMark.locality ?? ""
+  Future<void> post(
+      User currentUser,
+      File imageFile,
+      String caption,
+      Local.Location? location,
+      String locationString
+      ) async {
+    final storageId = Uuid().v1();
+    final imageUrl = await dbManager.uploadImageToStorage(imageFile, storageId);
+    final post = Post(
+      postId: Uuid().v1(),
+      userId: currentUser.userId,
+      imageUrl: imageUrl,
+      imageStoragePath: storageId,
+      caption: caption,
+      latitude: (location != null) ? location.latitude : 0.0,
+      longitude: (location != null) ? location.longitude : 0.0,
+      PostDateTime: DateTime.now(),
+      locationString: locationString,
     );
 
+    await dbManager.insertPost(post);
 
   }
+
+  Future<List<Post>> getPosts(feedOpenMode from, User feedUser) async {
+    if(from == feedOpenMode.FROM_FEED){
+      return await dbManager.getPostsByMineAndFollowings(feedUser.userId);
+    } else {
+      return await dbManager.getPostsByUser(feedUser.userId);
+    }
+  }
+
+  Future<void>updatePost(Post updatePost) async {
+    return dbManager.updatePost(updatePost);
+  }
+
+  Future<void> postComment(Post post, User commentUser, String commentString) async {
+    final comment = Comment(
+      comment: commentString,
+      commentDateTime: DateTime.now(),
+      postId: post.postId,
+      commentId: Uuid().v1(),
+      commentUserId: commentUser.userId
+    );
+    await dbManager.postComment(comment);
+  }
+
+  Future<List<Comment>> getComments(String postId) async {
+    return await dbManager.getComments(postId);
+  }
+
+  Future<void>deleteComment(String deleteCommentId) async {
+    await dbManager.deleteComment(deleteCommentId);
+  }
+
+  Future<void> likeIt(Post post, User currentUser) async {
+    final like = Like(
+      likeId: Uuid().v1(),
+      postId: post.postId,
+      likeUserId: currentUser.userId,
+      likeDateTime: DateTime.now(),
+    );
+    await dbManager.postLike(like);
+  }
+
+  Future<void> unLikeIt(Post post, User currentUser) async {
+    await dbManager.unLikeIt(post, currentUser);
+  }
+
+
+  Future<LikeResult>getLikeResults(String postId, User currentUser) async {
+    final likes = await dbManager.getLikeResults(postId);
+    var isLikePost = false;
+    for(var like in likes){
+      if(like.likeUserId == currentUser.userId){
+        isLikePost = true;
+        break;
+      }
+    }
+    return LikeResult(likes: likes, isLikedToThisPost: isLikePost);
+  }
+
+  Future<void> deletePost(String postId, String imageStoragePath) async {
+    await dbManager.deletePost(postId, imageStoragePath);
+  }
+
+  Future<Local.Location>updateLocation(double latitude, double longitude) async {
+    return await locationManager.updateLocation(latitude, longitude);
+  }
+
+
 
 
 }

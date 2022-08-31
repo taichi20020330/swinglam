@@ -1,4 +1,4 @@
-package com.example.swinglam
+package pinoko72447.swinglam
 
 import io.flutter.embedding.android.FlutterActivity
 

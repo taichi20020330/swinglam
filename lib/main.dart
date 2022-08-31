@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:swinglam/di/providers.dart';
 import 'package:swinglam/firebase_options.dart';
@@ -7,8 +8,14 @@ import 'package:swinglam/views/home_screen.dart';
 import 'package:swinglam/style.dart';
 import 'package:swinglam/view_models/login_view_model.dart';
 import 'package:swinglam/views/login/screens/login_screen.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
+import 'generated/l10n.dart';
+
 
 void main() async {
+  timeago.setLocaleMessages("ja", timeago.JaMessages()); // Add french messages
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -27,6 +34,13 @@ class MyApp extends StatelessWidget {
     final loginViewModel = context.read<LoginViewModel>();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: S.delegate.supportedLocales,
       theme: ThemeData(
         brightness: Brightness.dark,
         elevatedButtonTheme: ElevatedButtonThemeData(

@@ -5,6 +5,7 @@ import 'package:swinglam/views/post/pages/post_page.dart';
 import 'package:swinglam/views/profile/pages/profile_page.dart';
 import 'package:swinglam/views/search/pages/search_page.dart';
 
+import '../constants.dart';
 import 'feed/pages/feed_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,7 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
       SearchPage(),
       PostPage(),
       ActivitiesPage(),
-      ProfilePage(),
+      ProfilePage(
+        profileMode: ProfileOpenMode.MYSELF,
+      ),
     ];
     super.initState();
   }
